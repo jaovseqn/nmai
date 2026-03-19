@@ -1,0 +1,27 @@
+name: yolo_dense_shelf_baseline
+model: yolo11l.pt
+imgsz: 1600
+epochs: 80
+batch: 4
+device: 0
+optimizer: auto
+workers: 8
+patience: 20
+close_mosaic: 10
+cos_lr: true
+cache: false
+copy_paste: 0.15
+mixup: 0.1
+mosaic: 0.7
+hsv_h: 0.01
+hsv_s: 0.5
+hsv_v: 0.3
+degrees: 2.0
+translate: 0.08
+scale: 0.4
+fliplr: 0.0
+perspective: 0.0002
+notes:
+  - High input size because shelf objects are frequently small.
+  - Use tiling at validation and inference even if the training images are full-frame.
+  - This is a baseline preset, not a guarantee that the ultralytics defaults are optimal.

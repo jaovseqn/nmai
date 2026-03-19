@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nmai"
+version = "0.1.0"
+description = "Utilities and baselines for Norwegian grocery shelf detection"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pillow>=10.4.0",
+    "pyyaml>=6.0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.11.0",
+]
+train = [
+    "ultralytics>=8.3.0",
+    "ensemble-boxes>=1.0.9",
+]
+eval = [
+    "pycocotools>=2.0.8",
+]
+
+[project.scripts]
+nmai = "nmai.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+ignore = ["E501"]
