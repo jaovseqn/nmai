@@ -1,5 +1,5 @@
-train_annotations: /Users/JAOVS/Desktop/NM/train/annotations.json
-train_images_dir: /Users/JAOVS/Desktop/NM/train/images
-catalog_root: /Users/JAOVS/Desktop/NM/NM_NGD_product_images
+train_annotations: ../train/annotations.json
+train_images_dir: ../train/images
+catalog_root: ../NM_NGD_product_images
 reports_dir: reports
 yolo_export_dir: data/yolo

@@ -33,7 +33,7 @@ nmai/
 ## Install
 
 ```bash
-cd /Users/JAOVS/Desktop/NM/nmai
+cd nmai
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .
@@ -53,11 +53,19 @@ pip install -e .[eval]
 
 ## Commands
 
+Set your dataset roots once (adjust these paths to your machine):
+
+```bash
+export NMAI_TRAIN_ANN="../train/annotations.json"
+export NMAI_TRAIN_IMG_DIR="../train/images"
+export NMAI_CATALOG_ROOT="../NM_NGD_product_images"
+```
+
 Create an audit report:
 
 ```bash
 nmai audit \
-	--annotations /Users/JAOVS/Desktop/NM/train/annotations.json \
+	--annotations "$NMAI_TRAIN_ANN" \
 	--out reports/audit.json
 ```
 
@@ -65,13 +73,13 @@ Create deterministic cross-validation folds:
 
 ```bash
 nmai split \
-	--annotations /Users/JAOVS/Desktop/NM/train/annotations.json \
+	--annotations "$NMAI_TRAIN_ANN" \
 	--num-folds 5 \
 	--seed 42 \
 	--out reports/folds.json
 
 nmai catalog-manifest \
-	--catalog-root /Users/JAOVS/Desktop/NM/NM_NGD_product_images \
+	--catalog-root "$NMAI_CATALOG_ROOT" \
 	--out reports/catalog_manifest.json
 ```
 
@@ -79,8 +87,8 @@ Export the dataset to YOLO layout:
 
 ```bash
 nmai export-yolo \
-	--annotations /Users/JAOVS/Desktop/NM/train/annotations.json \
-	--images-dir /Users/JAOVS/Desktop/NM/train/images \
+	--annotations "$NMAI_TRAIN_ANN" \
+	--images-dir "$NMAI_TRAIN_IMG_DIR" \
 	--out-dir data/yolo \
 	--split-json reports/folds.json \
 	--val-fold 0
@@ -91,8 +99,8 @@ nmai train-yolo \
 	--project-dir artifacts
 
 nmai train-yolo-folds \
-	--annotations /Users/JAOVS/Desktop/NM/train/annotations.json \
-	--images-dir /Users/JAOVS/Desktop/NM/train/images \
+	--annotations "$NMAI_TRAIN_ANN" \
+	--images-dir "$NMAI_TRAIN_IMG_DIR" \
 	--split-json reports/folds.json \
 	--experiment-config configs/experiments/yolo_baseline.yaml \
 	--export-root data/yolo_folds \
@@ -101,7 +109,7 @@ nmai train-yolo-folds \
 
 nmai predict-yolo-tiles \
 	--model-path artifacts/yolo_dense_shelf_baseline/weights/best.pt \
-	--input-path /Users/JAOVS/Desktop/NM/train/images \
+	--input-path "$NMAI_TRAIN_IMG_DIR" \
 	--out artifacts/predictions/tiled_val.json \
 	--tile-size 1280 \
 	--overlap 256 \
@@ -109,8 +117,8 @@ nmai predict-yolo-tiles \
 	--iou-thr 0.55
 
 nmai eval-coco \
-	--annotations /Users/JAOVS/Desktop/NM/train/annotations.json \
-	--images-dir /Users/JAOVS/Desktop/NM/train/images \
+	--annotations "$NMAI_TRAIN_ANN" \
+	--images-dir "$NMAI_TRAIN_IMG_DIR" \
 	--model-path artifacts/yolo_dense_shelf_baseline/weights/best.pt \
 	--split-json reports/folds.json \
 	--val-fold 0 \
@@ -120,8 +128,8 @@ nmai eval-coco \
 	--out reports/eval_fold0_tiled.json
 
 nmai run-fold-suite \
-	--annotations /Users/JAOVS/Desktop/NM/train/annotations.json \
-	--images-dir /Users/JAOVS/Desktop/NM/train/images \
+	--annotations "$NMAI_TRAIN_ANN" \
+	--images-dir "$NMAI_TRAIN_IMG_DIR" \
 	--split-json reports/folds.json \
 	--experiment-config configs/experiments/yolo_baseline.yaml \
 	--export-root data/yolo_folds \
@@ -129,6 +137,10 @@ nmai run-fold-suite \
 	--reports-root reports/suite \
 	--folds 0,1
 ```
+
+## Submission Notes
+
+For competition submission packaging and verification steps, see [SUBMISSION.md](SUBMISSION.md).
 
 ## Suggested next experiments
 
